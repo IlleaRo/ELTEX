@@ -1,0 +1,15 @@
+# Игнорировать временные файлы CMake
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+build/
+cmake-build-debug/
+
+# Игнорировать исполняемые файлы и библиотеки
+*.exe
+*.so
+*.dylib
+
+# Игнорировать файлы, созданные IDE
+.vscode/
+.idea/
