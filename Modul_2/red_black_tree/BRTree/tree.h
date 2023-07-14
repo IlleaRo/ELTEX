@@ -6,7 +6,6 @@
 #define RED_BLACK_TREE_TREE_H
 
 #define TYPE int
-
 typedef struct TreeNode TreeNode; // Структура вершины дерева
 
 // Вывод дерева на экран

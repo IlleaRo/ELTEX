@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "tree.h"
 
 typedef struct TreeNode{
@@ -25,27 +26,21 @@ typedef struct TreeNode{
 TreeNode* find(TreeNode* root, TYPE x){
     if (!root) return NULL;
     TreeNode* v = root, *vp = root;
-    TYPE val;
     while (v){
-        val = *v->value;
-        if (val==x) return v;
-        else if (x < val){
-            vp = v;
+        if (*v->value==x) return v;
+        else if (x < *v->value)
             v = v->left;
-        } else {
-            vp = v;
+        else
             v = v->right;
-        }
     }
-    return vp;
+    return v;
 }
 
 
 void showLine(char* c, int p, int s) {
-    int t = s;
     for (int i = 0; i < p; i++) {
-        printf(t & 1 ? "|  " : "   ");
-        t /= 2;
+        printf(s & 1 ? "|  " : "   ");
+        s /= 2;
     }
     printf("%s", c);
 }
@@ -213,3 +208,6 @@ void clearTree(TreeNode** root){
     free(*root);
     *root = NULL;
 }
+
+
+

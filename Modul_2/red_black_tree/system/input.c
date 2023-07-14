@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "input.h"
 
 #define INPUT_SIZE 11 // 10 символов максимум!
