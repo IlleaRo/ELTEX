@@ -38,7 +38,7 @@ Enemy getEnemy(short level){
 }
 
 void attackEnemy(Character* attacker, Enemy* defender){ // В данной функции герой бьет по врагу
-    if (rand()/RAND_MAX >= attacker->luck){ // Результат атаки зависит от удачи
+    if ((double)(rand())/RAND_MAX >= attacker->luck){ // Результат атаки зависит от удачи
         printf("%s missed\n", attacker->name);
         return;
     } else
@@ -46,7 +46,8 @@ void attackEnemy(Character* attacker, Enemy* defender){ // В данной фу�
 }
 
 void attackHero(Enemy * attacker, Character * defender){ // В данной функции враг бьет по горою
-    if (rand()/RAND_MAX >= 1 - defender->luck){ // Чем выше везение героя, тем больше вероятность промаха по нему
+    double rands = (double)(rand())/RAND_MAX;
+    if ((double)(rand())/RAND_MAX >= 1 - defender->luck){ // Чем выше везение героя, тем больше вероятность промаха по нему
         printf("%s missed\n", attacker->name);
         defender->luck-=(float)0.2;
         if (defender->luck<0) defender->luck = 0;
@@ -56,11 +57,11 @@ void attackHero(Enemy * attacker, Character * defender){ // В данной фу
         defender->hp-= attacker->damage - defender->armor.effect/50;
 }
 
-
+/*
 void kill(Character* character){
     printf("%s had died", character->name);
     free(character->name);
-}
+} */
 
 bool fight(Character* hero, short level, int* moneyStat) {
     Enemy enemy = getEnemy(level); // Получаем случайного врага в зависимости от уровня
@@ -91,8 +92,11 @@ bool fight(Character* hero, short level, int* moneyStat) {
                     hero->luck-= (float) 0.3;
                     if (hero->luck<0) hero->luck = 0;
                     if (enemy.hp<1) { // Проверяем количество здоровья у врага
-                        printf("You you have earned $%d!\nWould you like to put %s (%d)?\n YES (1) or NO (2)?",
-                               enemy.cost, enemy.loot->name, enemy.loot->effect);
+                        printf("You you have earned $%d!\nWould you like to put %s (%d) "
+                               "instead of %s (%d?)\n YES (1) or NO (2)?",
+                               enemy.cost, enemy.loot->name, enemy.loot->effect,
+                               enemy.lootIsWeapon? hero->weapon.name : hero->armor.name,
+                               enemy.lootIsWeapon? hero->weapon.effect : hero->armor.effect);
                         hero->money+=enemy.cost;
                         *moneyStat+=enemy.cost;
                         while ((answer = readShort()) < 1 || answer > 2) printf("Incorrect answer!");
@@ -131,8 +135,11 @@ bool fight(Character* hero, short level, int* moneyStat) {
                         hero->luck-= (float) 0.3;
                         if (hero->luck<0) hero->luck = 0;
                         if (enemy.hp<1) {
-                            printf("You you have earned $%d!\nWould you like to put %s (%d)?\n YES (1) or NO (2)?",
-                                   enemy.cost, enemy.loot->name, enemy.loot->effect);
+                            printf("You you have earned $%d!\nWould you like to put %s (%d) "
+                                   "instead of %s (%d?)\n YES (1) or NO (2)?",
+                                   enemy.cost, enemy.loot->name, enemy.loot->effect,
+                                   enemy.lootIsWeapon? hero->weapon.name : hero->armor.name,
+                                   enemy.lootIsWeapon? hero->weapon.effect : hero->armor.effect);
                             hero->money+=enemy.cost;
                             *moneyStat+=enemy.cost;
                             while ((answer = readShort()) < 1 || answer > 2) printf("Incorrect answer!");
@@ -167,8 +174,11 @@ bool fight(Character* hero, short level, int* moneyStat) {
                     hero->luck-= (float) 0.3;
                     if (hero->luck<0) hero->luck = 0;
                     if (enemy.hp<1) {
-                        printf("You you have earned $%d!\nWould you like to put %s (%d)?\n YES (1) or NO (2)?",
-                               enemy.cost, enemy.loot->name, enemy.loot->effect);
+                        printf("You you have earned $%d!\nWould you like to put %s (%d) "
+                               "instead of %s (%d?)\n YES (1) or NO (2)?",
+                               enemy.cost, enemy.loot->name, enemy.loot->effect,
+                               enemy.lootIsWeapon? hero->weapon.name : hero->armor.name,
+                               enemy.lootIsWeapon? hero->weapon.effect : hero->armor.effect);
                         hero->money+=enemy.cost;
                         *moneyStat+=enemy.cost;
                         while ((answer = readShort()) < 1 || answer > 2) printf("Incorrect answer!");

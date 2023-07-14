@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 
 #include "system/StartGame.h"
@@ -21,22 +22,34 @@ int main() {
     Item inventory[2];
     srand(time(NULL));
     Location locations[5];
-    init(); initMap(locations, 5);
+    initThings(); initMap(locations, 5);
     Character hero;
-    hero.name;
+    printf("Input hero name: ");
     fgets(hero.name, 20, stdin);
+    printf("\n");
     for (int i = 0; i < 20; ++i)
         if (hero.name[i] == '\n') {
             hero.name[i] ='\0';
             break;
         }
-    if (chooseHero()==1) {
-        hero.luck = (float) 0.5;
-        hero.hp = 100;
-    } else {
-        hero.luck = (float) 1;
-        hero.hp = 10000;
+    switch (chooseHero()) {
+        case 1: {
+            hero.luck = (float) 0.5;
+            hero.hp = 200;
+            break;
+        }
+        case 2: {
+            hero.luck = (float) 0.7;
+            hero.hp = 500;
+            break;
+        }
+        case 3: {
+            hero.luck = (float) 1;
+            hero.hp = 10000;
+            break;
+        }
     }
+
     hpMAX = hero.hp; luckMAX = hero.luck;
     printf("Today hero that name is %s will start him travel to the Raymond pick!\n", hero.name);
     createKit(inventory, 1);

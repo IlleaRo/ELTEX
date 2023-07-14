@@ -5,6 +5,7 @@
 #ifndef RPG_THINGS_H
 #define RPG_THINGS_H
 
+#include <stdbool.h>
 #include "stdlib.h"
 
 typedef struct Item{
@@ -21,7 +22,7 @@ static Item sacredArmor[3];
 
 static Item bosTreasure = {"The seed of Peace", 0, 32767};
 
-void init();
+void initThings();
 bool createKit(Item*,short); // Получить набор от торговца
 Item* getRandWeapon();
 Item* getRandArmor();

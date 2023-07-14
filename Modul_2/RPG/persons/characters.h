@@ -29,9 +29,9 @@ typedef struct Enemy {
 
 void EnemyInit(); // Инициализаций врагов
 Enemy getEnemy(short level); // Вернуть случайного врага
-void attack(Character* attacker, Character* defender); // Атака персонажа
-void kill(Character* character); // Убийство персонажа
-Enemy* createEnemy(short level); // Инициализация врага
+//void attack(Character* attacker, Character* defender); // Атака персонажа
+//void kill(Character* character); // Убийство персонажа
+//Enemy* createEnemy(short level); // Инициализация врага
 
 bool fight(Character* hero, short level, int*); // Сражение (выбирается случайный враг)
 

@@ -6,7 +6,7 @@
 
 
 
-void init(){
+void initThings(){
     weapons[0].name = "dagger"; weapons[0].effect = rand() % 20 + 10; weapons[0].cost = rand()%10+10; // Кинжал
     weapons[1].name = "bow"; weapons[1].effect = rand() % 20 + 20; weapons[1].cost = rand()%10+20; // Лук
     weapons[2].name = "spear"; weapons[2].effect = rand() % 20 + 20; weapons[2].cost = rand()%10+30; // Копье
