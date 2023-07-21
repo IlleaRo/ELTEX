@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 int main(int argc, char* argv[]) {
     int numOfRand;
@@ -44,11 +45,20 @@ int main(int argc, char* argv[]) {
             }
             close(myPipe[1]);
             int readRand;
-            for (int i = 0; i < numOfRand; ++i) {
+            int pFile;
+            if ((pFile = open("file.txt", O_RDWR | O_CREAT,0600)) == -1)
+            {
+                perror("problem with file!\n");
+                exit(EXIT_FAILURE);
+            }
+            for (int i = 0; i < numOfRand; ++i)
+            {
                 read(myPipe[0],&readRand,sizeof(int));
                 printf("%-2d\t%d\n",i+1,readRand);
+                write(pFile,&readRand, sizeof(int));
             }
             close(myPipe[0]);
+            close(pFile);
             break;
     }
     exit(EXIT_SUCCESS);
