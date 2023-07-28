@@ -1,0 +1,73 @@
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <netinet/udp.h>
+
+#define SIZE_OF_BUFF 1000
+
+int main(int argc, char* argv[]){
+
+    int sockfd; /* Дескриптор сокета */
+    socklen_t clilen; /* Переменные для различных длин и количества символов */
+    ssize_t n;
+
+
+    char line[1000]; /* Массив для принятой и отсылаемой строки */
+    struct sockaddr_in servaddr, cliaddr; /* Структуры для адресов сервера и клиента */
+/* Заполняем структуру для адреса сервера */
+    bzero(&servaddr, sizeof(servaddr));
+    servaddr.sin_family = AF_INET;
+
+    char* endPtr;
+    long t_port = strtol(argv[1],&endPtr,10);
+    if (t_port == 0)
+    {
+        printf("Invalid port\n");
+        close(sockfd); /* По окончании работы закрываем дескриптор сокета */
+        exit(EXIT_FAILURE);
+    }
+    /* Создаем RAW UDP сокет */
+    if((sockfd = socket(PF_INET, SOCK_RAW, IPPROTO_UDP)) < 0){
+        perror(NULL); /* Печатаем сообщение об ошибке */
+        exit(EXIT_FAILURE);
+    }
+    int one = 1;
+    const int *val = &one;
+    // inform the kernel do not fill up the packet structure, we will build our own
+    if(setsockopt(sockfd, IPPROTO_IP, IP_HDRINCL, val, sizeof(one)) < 0) {
+        perror("setsockopt() error");
+        exit(2);
+    }
+    printf("OK: socket option IP_HDRINCL is set.\n");
+
+    servaddr.sin_port = htons(t_port);
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    /* Настраиваем адрес сокета */
+    clilen = sizeof(cliaddr);
+        /* Основной цикл подслушивания*/
+/* Ожидаем прихода запроса от клиента и читаем его */
+    while (1) {
+
+        if ((n = recvfrom(sockfd, line, SIZE_OF_BUFF, 0,
+                          (struct sockaddr *) &servaddr, &clilen)) < 0) {
+            perror(NULL);
+            close(sockfd);
+            exit(EXIT_FAILURE);
+        }
+        struct udphdr *udp_header = (struct udphdr *) line;
+        if (udp_header->dest == htons(t_port)) {
+            for (int i = 0; i < n; ++i) {
+                printf("%02x ", line[i]);
+                if (i % 16 == 0 && i > 0)
+                    printf("\n");
+            }
+        } else {
+            printf("Получен не UDP пакет или пакет с другим портом.\n");
+        }
+    }
+/* Печатаем принятый текст на экране */
+    exit(EXIT_SUCCESS);
+}
